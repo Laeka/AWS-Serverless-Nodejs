@@ -1,0 +1,109 @@
+service: aws-serverless-jrtest
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  environment:
+    DYNAMO_TABLE_NAME: PlanetasTabla
+  region: us-west-2
+  stage: dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-west-2:669154649193:table/PlanetasTabla
+
+functions:
+  hello:
+    handler: src/planetas.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+  crearPlaneta:
+    handler: src/agregarPlaneta.agregarPlaneta
+    events:
+      - httpApi:
+          path: /planeta
+          method: post 
+          responses: {
+            201: {
+              description: 'Planeta creado satisfactoriamente',
+              bodyType: 'PostPlanetBody'
+            }
+          }
+  listarPlanetas:
+    handler: src/listarPlanetas.listarPlanetas
+    events:
+      - httpApi:
+          path: /planetas
+          method: get
+          responses: {
+            200: {
+              description: 'Peticion exitosa',
+              bodyType: 'Planets'
+            }
+          }
+  listarPlaneta:
+    handler: src/listarPlaneta.listarPlaneta
+    events:
+      - httpApi:
+          path: /planetas/{id}
+          method: get
+          responses: {
+            200: {
+              description: 'Peticion exitosa'
+            }
+          }
+  eliminarPlaneta:
+    handler: src/eliminarPlaneta.eliminarPlaneta
+    events:
+      - httpApi:
+          path: /planetas/{id}
+          method: delete
+          responses: {
+            200: {
+              description: 'Planeta destruido'
+            }
+          }
+
+resources:
+  Resources:
+    TablaPlanetas:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMO_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+plugins:
+    - serverless-auto-swagger
+    - serverless-dynamodb-local
+    - serverless-offline
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+    migration:
+      dir: offline/migrations
+  autoswagger: {
+    typefiles: ['./src/types/planets.d.ts']
+  }
