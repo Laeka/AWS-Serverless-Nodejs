@@ -38,11 +38,8 @@
         ],
         "parameters": [],
         "responses": {
-          "201": {
-            "description": "Planeta creado satisfactoriamente",
-            "schema": {
-              "$ref": "#/definitions/PostPlanetBody"
-            }
+          "200": {
+            "description": "200 response"
           }
         }
       }
@@ -61,10 +58,7 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Peticion exitosa",
-            "schema": {
-              "$ref": "#/definitions/Planets"
-            }
+            "description": "200 response"
           }
         }
       }
@@ -90,7 +84,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Peticion exitosa"
+            "description": "200 response"
           }
         }
       },
@@ -114,7 +108,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Planeta destruido"
+            "description": "200 response"
           }
         }
       }

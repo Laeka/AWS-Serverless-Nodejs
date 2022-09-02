@@ -28,46 +28,28 @@ functions:
       - httpApi:
           path: /planeta
           method: post 
-          responses: {
-            201: {
-              description: 'Planeta creado satisfactoriamente',
-              bodyType: 'PostPlanetBody'
-            }
-          }
+          
   listarPlanetas:
     handler: src/listarPlanetas.listarPlanetas
     events:
       - httpApi:
           path: /planetas
           method: get
-          responses: {
-            200: {
-              description: 'Peticion exitosa',
-              bodyType: 'Planets'
-            }
-          }
+          
   listarPlaneta:
     handler: src/listarPlaneta.listarPlaneta
     events:
       - httpApi:
           path: /planetas/{id}
           method: get
-          responses: {
-            200: {
-              description: 'Peticion exitosa'
-            }
-          }
+          
   eliminarPlaneta:
     handler: src/eliminarPlaneta.eliminarPlaneta
     events:
       - httpApi:
           path: /planetas/{id}
           method: delete
-          responses: {
-            200: {
-              description: 'Planeta destruido'
-            }
-          }
+          
 
 resources:
   Resources:

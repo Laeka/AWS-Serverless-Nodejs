@@ -9,9 +9,7 @@ const listarPlanetas = async () => {
     const parametros = {
       TableName: process.env.DYNAMO_TABLE_NAME,
     }
-    console.log(parametros)
     const planetas = await documentClient.scan(parametros).promise()
-    console.log(planetas)
     return sendResponse(200, {items: planetas.Items})
   } catch (err) {
     console.log(err)
